@@ -1,14 +1,12 @@
 from fastapi import FastAPI
-from app.models.models import User
+from app.models.models import Feedback
 from pydantic import BaseModel  
 
 app = FastAPI()
 
-class CalculateRequest(BaseModel):
-    num1: float  
-    num2: float
+feedback_db = []
 
-@app.post("/calculate")
-async def calculate(request: CalculateRequest):
-    result = request.num1 + request.num2
-    return {"result": result}
+@app.post('/feedback')
+async def add_feedback(feedback: Feedback):
+    feedback_db.append({"name": feedback.name, "message": feedback.message})
+    return {"message": f"Спасибо, {feedback.name}! Ваш отзыв сохранён."}
